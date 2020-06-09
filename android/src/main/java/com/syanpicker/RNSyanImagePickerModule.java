@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -53,15 +54,37 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
 
     private ReadableMap cameraOptions; // 保存图片选择/相机选项
 
+    private final String pictureMimeTypePNG;
+
     public RNSyanImagePickerModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
         reactContext.addActivityEventListener(mActivityEventListener);
+
+        pictureMimeTypePNG = getPrivateMember(PictureMimeType.class, "PNG", String.class, ".png");
+
     }
 
     @Override
     public String getName() {
         return "RNSyanImagePicker";
+    }
+
+    /**
+     * 获取Picture私有的 PictureMimeType.PNG属性
+     */
+    public static <T, R> R getPrivateMember(Class<T> clazz, String fieldName, Class<R> targetClazz, R defaultValue) {
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Object result = field.get(clazz.newInstance());
+            if (result.getClass() == targetClazz) {
+                return (R) result;
+            }
+        } catch (Exception e) {
+            // Ignore
+        }
+        return defaultValue;
     }
 
     @ReactMethod
@@ -186,7 +209,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
                 .previewVideo(false)// 是否可预览视频 true or false
                 .enablePreviewAudio(false) // 是否可播放音频 true or false
                 .isCamera(isCamera)// 是否显示拍照按钮 true or false
-                .imageFormat(isAndroidQ ? PictureMimeType.PNG_Q : PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .imageFormat(isAndroidQ ? PictureMimeType.PNG_Q : pictureMimeTypePNG)// 拍照保存图片格式后缀,默认jpeg
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                 .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                 .enableCrop(isCrop)// 是否裁剪 true or false
@@ -233,7 +256,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         PictureSelector.create(currentActivity)
                 .openCamera(PictureMimeType.ofImage())
                 .loadImageEngine(GlideEngine.createGlideEngine())
-                .imageFormat(isAndroidQ ? PictureMimeType.PNG_Q : PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
+                .imageFormat(isAndroidQ ? PictureMimeType.PNG_Q : pictureMimeTypePNG)// 拍照保存图片格式后缀,默认jpeg
                 .enableCrop(isCrop)// 是否裁剪 true or false
                 .compress(compress)// 是否压缩 true or false
                 .glideOverride(160, 160)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
