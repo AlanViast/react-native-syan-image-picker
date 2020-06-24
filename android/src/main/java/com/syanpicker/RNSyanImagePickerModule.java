@@ -373,6 +373,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
             String filePath = isAndroidQ ? media.getAndroidQToPath() : media.getPath();
 
             videoMap.putString("uri", "file://" + filePath);
+            videoMap.putString("android_q_path", "file://" + media.getAndroidQToPath());
             videoMap.putString("coverUri", "file://" + this.getVideoCover(filePath));
             videoMap.putString("fileName", new File(media.getPath()).getName());
             videoMap.putDouble("size", new File(media.getPath()).length());
@@ -422,6 +423,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         imageMap.putDouble("height", options.outHeight);
         imageMap.putString("type", "image");
         imageMap.putString("uri", "file://" + path);
+        videoMap.putString("android_q_path", "file://" + media.getAndroidQToPath());
         imageMap.putString("original_uri", "file://" + media.getPath());
         imageMap.putInt("size", (int) new File(path).length());
 
