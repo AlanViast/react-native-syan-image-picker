@@ -186,6 +186,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         boolean scaleEnabled = this.cameraOptions.getBoolean("scaleEnabled");
         int minimumCompressSize = this.cameraOptions.getInt("minimumCompressSize");
         int quality = this.cameraOptions.getInt("quality");
+        int screenOrientation = this.cameraOptions.getInt("screenOrientation");
         boolean isWeChatStyle = this.cameraOptions.getBoolean("isWeChatStyle");
 
         int modeValue;
@@ -205,6 +206,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
                 .minSelectNum(0)// 最小选择数量 int
                 .isPageStrategy(true, true)
                 .imageSpanCount(4)// 每行显示个数 int
+                .setRequestedOrientation(screenOrientation)
                 .selectionMode(modeValue)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
                 .previewImage(true)// 是否可预览图片 true or false
                 .previewVideo(false)// 是否可预览视频 true or false
@@ -285,12 +287,14 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         int MinSecond = this.cameraOptions.getInt("MinSecond");
         int recordVideoSecond = this.cameraOptions.getInt("recordVideoSecond");
         int imageCount = this.cameraOptions.getInt("imageCount");
+        int screenOrientation = this.cameraOptions.getInt("screenOrientation");
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
                 .openCamera(PictureMimeType.ofVideo())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .loadImageEngine(GlideEngine.createGlideEngine())
                 .selectionMedia(selectList) // 当前已选中的图片 List
                 .openClickSound(false)// 是否开启点击声音 true or false
+                .setRequestedOrientation(screenOrientation)
                 .maxSelectNum(imageCount)// 最大图片选择数量 int
                 .minSelectNum(0)// 最小选择数量 int
                 .imageSpanCount(4)// 每行显示个数 int
