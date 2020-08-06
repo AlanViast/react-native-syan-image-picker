@@ -251,6 +251,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         boolean rotateEnabled = this.cameraOptions.getBoolean("rotateEnabled");
         boolean scaleEnabled = this.cameraOptions.getBoolean("scaleEnabled");
         int minimumCompressSize = this.cameraOptions.getInt("minimumCompressSize");
+        int screenOrientation = this.cameraOptions.getInt("screenOrientation");
         int quality = this.cameraOptions.getInt("quality");
 
         Boolean isAndroidQ = SdkVersionUtils.checkedAndroid_Q();
@@ -259,6 +260,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         PictureSelector.create(currentActivity)
                 .openCamera(PictureMimeType.ofImage())
                 .loadImageEngine(GlideEngine.createGlideEngine())
+                .setRequestedOrientation(screenOrientation)
                 .imageFormat(isAndroidQ ? PictureMimeType.PNG_Q : pictureMimeTypePNG)// 拍照保存图片格式后缀,默认jpeg
                 .enableCrop(isCrop)// 是否裁剪 true or false
                 .compress(compress)// 是否压缩 true or false
@@ -288,6 +290,7 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         int recordVideoSecond = this.cameraOptions.getInt("recordVideoSecond");
         int imageCount = this.cameraOptions.getInt("imageCount");
         int screenOrientation = this.cameraOptions.getInt("screenOrientation");
+
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
                 .openCamera(PictureMimeType.ofVideo())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
@@ -317,12 +320,14 @@ public class RNSyanImagePickerModule extends ReactContextBaseJavaModule {
         int recordVideoSecond = this.cameraOptions.getInt("recordVideoSecond");
         int videoCount = this.cameraOptions.getInt("imageCount");
         boolean isCamera = this.cameraOptions.getBoolean("allowTakeVideo");
+        int screenOrientation = this.cameraOptions.getInt("screenOrientation");
 
         Activity currentActivity = getCurrentActivity();
         PictureSelector.create(currentActivity)
                 .openGallery(PictureMimeType.ofVideo())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .loadImageEngine(GlideEngine.createGlideEngine())
                 .selectionMedia(selectList) // 当前已选中的视频 List
+                .setRequestedOrientation(screenOrientation)
                 .openClickSound(false)// 是否开启点击声音 true or false
                 .isCamera(isCamera)// 是否显示拍照按钮 true or false
                 .maxSelectNum(videoCount)// 最大视频选择数量 int
